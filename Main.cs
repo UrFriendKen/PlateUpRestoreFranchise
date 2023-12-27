@@ -39,7 +39,7 @@ namespace KitchenRestoreFranchise
             { Locale.Turkish, new PopupDetails() { Title = "Franchise'ı Geri Yükle", Description = "Bu restoranı tekrar franchise'a dönüştürmek istediğinizden emin misiniz?" } }
         };
 
-        internal const string BUTTON_TEXT_RESTORE_FRANCHISE_KEY = "RESTORE_FRANCHISE";
+        internal const string BUTTON_TEXT_RESTORE_FRANCHISE_KEY = "MENU_RESTORE_FRANCHISE";
         private readonly Dictionary<Locale, string> RestoreFranchiseButtonText = new Dictionary<Locale, string>()
         {
             { Locale.English, "Restore Franchise" },

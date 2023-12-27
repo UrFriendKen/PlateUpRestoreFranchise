@@ -1,6 +1,7 @@
 ﻿using Kitchen;
 using KitchenData;
 using KitchenMods;
+using System;
 using Unity.Collections;
 using Unity.Entities;
 
@@ -41,29 +42,38 @@ namespace KitchenRestoreFranchise
             if (!Require(out CFranchiseTier cFranchiseTier) || cFranchiseTier.Tier == 0)
                 return false;
             Entity entity = EntityManager.CreateEntity(typeof(CFranchiseItem), typeof(CFranchiseTier), typeof(CPersistThroughSceneChanges));
-            Set(entity, new CPersistentItem
+            try
             {
-                ItemID = AssetReference.FranchiseCardSet,
-                Type = PersistentStorageType.FranchiseCardSet
-            });
-            base.EntityManager.SetComponentData(entity, new CFranchiseTier
-            {
-                Tier = cFranchiseTier.Tier
-            });
-            DataObjectList cards = default(DataObjectList);
-            NativeArray<CProgressionUnlock> unlocks = Unlocks.ToComponentDataArray<CProgressionUnlock>(Allocator.Temp);
-            for (int i = 0; i < unlocks.Length; i++)
-            {
-                if (unlocks[i].FromFranchise)
+                Set(entity, new CPersistentItem
                 {
-                    cards.Add(unlocks[i].ID);
+                    ItemID = AssetReference.FranchiseCardSet,
+                    Type = PersistentStorageType.FranchiseCardSet
+                });
+                base.EntityManager.SetComponentData(entity, new CFranchiseTier
+                {
+                    Tier = cFranchiseTier.Tier
+                });
+                DataObjectList cards = default(DataObjectList);
+                NativeArray<CProgressionUnlock> unlocks = Unlocks.ToComponentDataArray<CProgressionUnlock>(Allocator.Temp);
+                for (int i = 0; i < unlocks.Length; i++)
+                {
+                    if (unlocks[i].FromFranchise)
+                    {
+                        cards.Add(unlocks[i].ID);
+                    }
                 }
+                Set(entity, new CFranchiseItem
+                {
+                    Name = Require(out CRenameRestaurant cRenameRestaurant) ? cRenameRestaurant.Name : "Restaurant",
+                    Cards = cards
+                });
             }
-            base.EntityManager.SetComponentData(entity, new CFranchiseItem
+            catch (Exception ex)
             {
-                Name = Require(out CRenameRestaurant cRenameRestaurant) ? cRenameRestaurant.Name : "Restaurant",
-                Cards = cards
-            });
+                Main.LogError($"{ex.Message}\n{ex.StackTrace}");
+                EntityManager.DestroyEntity(entity);
+                return false;
+            }
             return true;
         }
     }

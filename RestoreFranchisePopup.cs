@@ -39,7 +39,8 @@ namespace KitchenRestoreFranchise
 
         private bool CreateFranchise()
         {
-            if (!Require(out CFranchiseTier cFranchiseTier) || cFranchiseTier.Tier == 0)
+            if (!TryGetSingletonEntity<SKitchenLayout>(out Entity singleton) ||
+                !Require(singleton, out CFranchiseTier cFranchiseTier) || cFranchiseTier.Tier == 0)
                 return false;
             Entity entity = EntityManager.CreateEntity(typeof(CFranchiseItem), typeof(CFranchiseTier), typeof(CPersistThroughSceneChanges));
             try
@@ -54,7 +55,7 @@ namespace KitchenRestoreFranchise
                     Tier = cFranchiseTier.Tier
                 });
                 DataObjectList cards = default(DataObjectList);
-                NativeArray<CProgressionUnlock> unlocks = Unlocks.ToComponentDataArray<CProgressionUnlock>(Allocator.Temp);
+                using NativeArray<CProgressionUnlock> unlocks = Unlocks.ToComponentDataArray<CProgressionUnlock>(Allocator.Temp);
                 for (int i = 0; i < unlocks.Length; i++)
                 {
                     if (unlocks[i].FromFranchise)

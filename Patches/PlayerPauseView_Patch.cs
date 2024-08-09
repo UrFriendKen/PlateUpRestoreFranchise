@@ -11,9 +11,9 @@ namespace KitchenRestoreFranchise.Patches
     {
         [HarmonyPatch(typeof(PlayerPauseView), "PerformAction")]
         [HarmonyPrefix]
-        static void PerformAction_Prefix(PlayerPauseView __instance, int ___ActivePlayer, PauseMenuAction action)
+        static void PerformAction_Prefix(PlayerPauseView __instance, int ___ActivePlayer, MenuAction action)
         {
-            if (action == Main.PAUSE_MENU_ACTION_RESTORE_FRANCHISE)
+            if (action.PauseAction == Main.PAUSE_MENU_ACTION_RESTORE_FRANCHISE)
             {
                 if (GameInfo.CurrentScene == SceneType.Kitchen && GameInfo.IsPreparationTime && GameInfo.CurrentDay < 3 &&
                     GameInfo.AllCurrentCards.Where(card => card is Unlock unlock && unlock.CardType == CardType.FranchiseTier).Any() &&

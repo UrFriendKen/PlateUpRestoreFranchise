@@ -15,7 +15,7 @@ namespace KitchenRestoreFranchise
     {
         public const string MOD_GUID = $"IcedMilo.PlateUp.{MOD_NAME}";
         public const string MOD_NAME = "Restore Franchise";
-        public const string MOD_VERSION = "0.1.1";
+        public const string MOD_VERSION = "0.1.2";
 
         private static readonly int RESTORE_FRANCHISE_ID = HashUtils.GetID($"{MOD_GUID}:restoreFranchise");
         internal static readonly GameStateRequest GAME_STATE_REQUEST_RESTORE_FRANCHISE = (GameStateRequest)RESTORE_FRANCHISE_ID;

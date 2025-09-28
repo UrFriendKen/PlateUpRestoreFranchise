@@ -17,7 +17,7 @@ namespace KitchenRestoreFranchise.Patches
             {
                 if (GameInfo.CurrentScene == SceneType.Kitchen && GameInfo.IsPreparationTime && GameInfo.CurrentDay < 3 &&
                     GameInfo.AllCurrentCards.Where(card => card is Unlock unlock && unlock.CardType == CardType.FranchiseTier).Any() &&
-                    Session.CurrentGameNetworkMode == GameNetworkMode.Host)
+                    Session.HostIdentifier == 0)
                 {
                     InputSourceIdentifier.DefaultInputSource.MakeRequest(___ActivePlayer, Main.GAME_STATE_REQUEST_RESTORE_FRANCHISE);
                 }
